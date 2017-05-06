@@ -1,5 +1,5 @@
 # Algorithms
-Implementation of basic algorithms
+Implementation of basic algorithms:
 
 insertion sort
 
