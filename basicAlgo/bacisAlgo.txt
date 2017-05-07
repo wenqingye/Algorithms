@@ -1,0 +1,240 @@
+//insertion sort
+
+//sort an array of integers to ascending order
+public void insertionSort(int[] arr) {
+	for(int i = 1; i < arr.length; i++) {
+		for(int j = i; j > 0; j--) {
+			if(arr[j] < arr[j-1]) {
+				int tmp = arr[j];
+				arr[j] = arr[j-1];
+				arr[j-1] = tmp;
+			}
+		}
+	}
+	
+	//print new sorted array
+	for(int i : arr) {
+		System.out.print(i);
+		System.out.print(' ');
+	}
+}
+----------------------------------------
+
+//linear search
+
+//an array of integers, find index of a value
+public int linearSearch(int[] arr, int v){
+	for(int i = 0; i < arr.length; i++){
+		if(arr[i] == v){
+			return i+1;
+		}
+	}
+	return 0;
+}
+----------------------------------------
+
+//adding two n bit binary integers
+	
+public int[] addTwoBiInt(int[] arr1, int[] arr2, int n){
+	//store the result in a n+1 element array
+	int[] ret = new int[n+1];
+	int carry = 0;
+	for(int i = 0; i < n; i++){
+		if(arr1[i] == arr2[i] && arr1[i] == 1){
+			ret[i] = carry;
+			carry = 1;
+		}
+		if(arr1[i] == arr2[i] && arr1[i] == 0){
+			ret[i] = carry;
+			carry = 0;
+		}
+		if(arr1[i] != arr2[i]){
+			ret[i] = carry + 1;
+			carry = 0;
+		}
+	}
+	if(carry == 1){
+		ret[n] = 1;
+	}else{
+		ret[n] = 0;
+	}
+	return ret;
+}
+----------------------------
+
+//selection sort
+	
+public int[] selectionSort(int[] arr){
+	for(int i=0; i<arr.length; i++){
+		int min = i;
+		for(int j=i+1; j<arr.length; j++){
+			if(arr[j]<arr[min]){
+				min = j;
+				}
+			}
+		//swap min and i
+		int tmp = arr[min];
+		arr[min] = arr[i];
+		arr[i] = tmp;
+	}
+	return arr;
+}
+------------------------------
+
+//merge sort
+
+public class Solution {
+	private int[] array;
+	private int[] tmpArr;
+	private int length;
+	
+	public void mergeSort(int[] arr){
+		this.array = arr;
+		this.length = arr.length;
+		this.tmpArr = new int[length];
+		doMergeSort(0, length-1);
+	}
+	
+	private void doMergeSort(int low, int high){
+		if(low<high){
+			int middle = (low + high) / 2;
+			doMergeSort(low, middle);
+			doMergeSort(middle+1, high);
+			merge(low, middle, high);
+		}
+	}
+	
+	private void merge(int low, int middle, int high){
+		for(int i=low; i<=high; i++){
+			tmpArr[i] = array[i];
+		}
+		int i = low;
+		int j = middle + 1;
+		int k = low;
+		while(i<=middle && j<=high){
+			if(tmpArr[i]<tmpArr[j]){
+				array[k] = tmpArr[i];
+				k++;
+				i++;
+			}else{
+				array[k] = tmpArr[j];
+				k++;
+				j++;
+			}
+		}
+		while(i<=middle){
+			array[k] = tmpArr[i];
+			k++;
+			i++;
+		}
+		while(j<=high){
+			array[k] = tmpArr[j];
+			k++;
+			j++;
+		}
+	}
+}
+-----------------------------------
+
+//heap sort
+
+public class Solution {
+	private int[] array;
+	private int heapSize;
+	
+	public void heapSort(int[] arr){
+		this.array = arr;
+		this.heapSize = arr.length;
+		//build heap, bottom up
+		for(int i=heapSize/2-1; i>=0; i--){
+			heapify(i, heapSize);
+		}
+		//swap root and last node in tree, build new heap on sub tree
+		for(int i=heapSize-1; i>=0; i--){
+			int tmp = array[0];
+			array[0] = array[i];
+			array[i] = tmp;
+			heapify(0, i);
+		}
+	}
+	
+	private void heapify(int root, int size){
+		int max = root;
+		int l = root*2+1;
+		int r = root*2+2;
+		if(l < size && array[l] > array[max]){
+			max = l;
+		}
+		if(r < size && array[r] > array[max]){
+			max = r;
+		}
+		if(max != root){
+			int tmp = array[max];
+			array[max] = array[root];
+			array[root] = tmp;
+			heapify(max, size);
+		}
+	}
+}
+-------------------------------------
+
+//quick sort
+
+public class Solution {
+	private int[] array;
+	private int length;
+	
+	public void quickSort(int[] arr){
+		this.array = arr;
+		this.length = arr.length;
+		doQuickSort(0, length-1);
+	}
+	
+	private void doQuickSort(int low, int high){
+		int pivot = array[(low + high) / 2];
+		int i = low;
+		int j = high;
+		while(i <= j){
+			while(array[i] < pivot){
+				i++;
+			}
+			while(array[j] > pivot){
+				j--;
+			}
+			if(i <= j){
+				int tmp = array[i];
+				array[i] = array[j];
+				array[j] = tmp;
+				i++;
+				j--;
+			}
+		}
+		if(low < j){
+			doQuickSort(low, j);
+		}
+		if(i < high){
+			doQuickSort(i, high);
+		}
+	}	
+}
+----------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
