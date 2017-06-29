@@ -1,1 +1,3 @@
-# LeetCode easy algorithms part 01
+# LeetCode Easy Algorithms
+
+Part 01
