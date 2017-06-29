@@ -1,0 +1,2532 @@
+//561. Array Partition I
+
+//Given an array of 2n integers, your task is to group these integers into n pairs of integer, 
+//say (a1, b1), (a2, b2), ..., (an, bn) which makes sum of min(ai, bi) for all i from 1 to n as large as possible.
+
+public class Solution {
+    public int arrayPairSum(int[] nums) {
+        Arrays.sort(nums);
+        int sum = 0;
+        for(int i = 0; i < nums.length; i+=2){
+            sum += nums[i];
+        }
+        return sum;
+    }
+}
+---------------------
+
+//461. Hamming Distance
+
+//The Hamming distance between two integers is the number of positions at which the corresponding bits are different.
+//Given two integers x and y, calculate the Hamming distance.
+//Note: 0 ≤ x, y < 231.
+
+public class Solution {
+    public int hammingDistance(int x, int y) {
+        return Integer.bitCount(x ^ y);
+    }
+}
+-------------------------
+
+//566. Reshape the Matrix
+
+//You're given a matrix represented by a two-dimensional array, and two positive integers r and c representing the row number and column number of the wanted reshaped matrix, respectively.
+//The reshaped matrix need to be filled with all the elements of the original matrix in the same row-traversing order as they were.
+//If the 'reshape' operation with given parameters is possible and legal, output the new reshaped matrix; Otherwise, output the original matrix.
+
+public class Solution {
+    public int[][] matrixReshape(int[][] nums, int r, int c) {
+        int mLen = nums.length;
+        int mWid = nums[0].length;
+        if(mLen * mWid != r * c){
+            return nums;
+        }
+        int[][] rc = new int[r][c];
+        for(int i = 0; i < r*c; i++){
+            rc[i/c][i%c] = nums[i/mWid][i%mWid];
+        }
+        return rc;
+    }
+}
+---------------------------
+
+//557. Reverse Words in a String III
+
+//Given a string, you need to reverse the order of characters in each word within a sentence while still preserving whitespace and initial word order.
+
+public class Solution {
+    public String reverseWords(String s) {
+        char[] s_char = s.toCharArray();
+        int begin = 0;
+        int end = 0;
+        for(int i = 0; i < s_char.length; i++){
+            if(s_char[i] == ' '){
+                end = i - 1;
+                reverse(s_char, begin, end);
+                begin = i + 1;
+            }
+            if(i == s_char.length-1){
+                reverse(s_char, begin, s_char.length-1);
+            }
+        }
+        return String.valueOf(s_char);
+    }
+    
+    public void reverse(char[] c, int begin, int end){
+        while(begin < end){
+            char tmp = c[end];
+            c[end] = c[begin];
+            c[begin] = tmp;
+            begin++;
+            end--;
+        }
+    }
+}
+-------------------------
+public class Solution {
+    public String reverseWords(String s) {
+        String[] words = s.split(" ");
+        StringBuilder ret = new StringBuilder();
+        for(String word : words){
+            ret.append(new StringBuffer(word).reverse().toString() + " ");
+        }
+        return ret.toString().trim();
+    }
+}
+----------------------------
+
+//Given a positive integer, output its complement number. The complement strategy is to flip the bits of its binary representation.
+
+public class Solution {
+    public int findComplement(int num) {
+        int mask = (Integer.highestOneBit(num) << 1) - 1;
+        return num ^ mask;
+    }
+}
+------------------------
+
+//575. Distribute Candies
+
+//Given an integer array with even length, where different numbers in this array represent different kinds of candies. 
+//Each number means one candy of the corresponding kind. You need to distribute these candies equally in number to brother and sister. 
+//Return the maximum number of kinds of candies the sister could gain.
+
+public class Solution {
+    public int distributeCandies(int[] candies) {
+        HashMap<Integer, Integer> count = new HashMap<Integer, Integer>();
+        for(int candy : candies){
+            count.put(candy, count.getOrDefault(candy, 0)+1);
+        }
+        int size = count.size();
+        return size < candies.length/2 ? size : candies.length/2;
+    }
+}
+---------------------------
+
+//500. Keyboard Row
+
+//Given a List of words, return the words that can be typed using letters of alphabet on only one row's of American keyboard like the image below.
+
+public class Solution {
+    public String[] findWords(String[] words) {
+        List<String> ret = new LinkedList<>();
+        String[] keyboards = {"qwertyuiop", "asdfghjkl", "zxcvbnm"};
+        for(String kb : keyboards){
+            for(String word : words){
+                boolean flag = true;
+                for(char w : word.toCharArray()){
+                    if(!kb.contains(String.valueOf(w).toLowerCase())){
+                        flag = false;
+                        break;
+                    }
+                }
+                if(flag) ret.add(word);
+            }
+        }
+        return ret.toArray(new String[ret.size()]);
+    }
+}
+--------------------------------
+
+//412. Fizz Buzz
+
+//Write a program that outputs the string representation of numbers from 1 to n.
+//But for multiples of three it should output “Fizz” instead of the number and for the multiples of five output “Buzz”. 
+//For numbers which are multiples of both three and five output “FizzBuzz”.
+
+public class Solution {
+    public List<String> fizzBuzz(int n) {
+        List<String> ret = new ArrayList<>();
+        for(int i = 1; i <= n; i++){
+            if(i%15 == 0){
+                ret.add("FizzBuzz");
+            }else if(i%3 == 0){
+                ret.add("Fizz");
+            }
+            else if(i%5 == 0){
+                ret.add("Buzz");
+            }
+            else{
+                ret.add(Integer.toString(i));
+            }
+        }
+        return ret;
+    }
+}
+--------------------------------
+
+//344. Reverse String
+
+//Write a function that takes a string as input and returns the string reversed.
+
+public class Solution {
+    public String reverseString(String s) {
+        char[] s_char = s.toCharArray();
+        int i = 0;
+        int j = s_char.length-1;
+        while(i < j){
+            char tmp = s_char[i];
+            s_char[i] = s_char[j];
+            s_char[j] = tmp;
+            i++;
+            j--;
+        }
+        return String.valueOf(s_char);
+    }
+}
+---------------------------------
+
+//496. Next Greater Element I
+
+//You are given two arrays (without duplicates) nums1 and nums2 where nums1’s elements are subset of nums2. 
+//Find all the next greater numbers for nums1's elements in the corresponding places of nums2.
+//The Next Greater Number of a number x in nums1 is the first greater number to its right in nums2. 
+//If it does not exist, output -1 for this number.
+
+public class Solution {
+    public int[] nextGreaterElement(int[] findNums, int[] nums) {
+        for(int i = 0; i < findNums.length; i++) {
+            for(int j = 0; j < nums.length; j++) {
+                if(findNums[i] == nums[j]) {
+                    boolean flag = false;
+                    while(j < nums.length){
+                        if(nums[j] > findNums[i]){
+                            findNums[i] = nums[j];
+                            flag = true;
+                            break;
+                        }
+                        j++;
+                    }
+                    if(!flag){
+                        findNums[i] = -1;
+                    }
+                }
+            }
+        }
+        return findNums;
+    }
+}
+---------------------------------
+public class Solution {
+    public int[] nextGreaterElement(int[] findNums, int[] nums) {
+        Map<Integer, Integer> map = new HashMap<>();
+        Stack<Integer> stack = new Stack<>();
+        for(int num : nums){
+            while(!stack.isEmpty() && stack.peek()<num){
+                map.put(stack.pop(), num);
+            }
+            stack.push(num);
+        }
+        for(int i = 0; i < findNums.length; i++){
+            findNums[i] = map.getOrDefault(findNums[i], -1);
+        }
+        return findNums;
+    }
+}
+-------------------------------
+
+//463. Island Perimeter
+
+//You are given a map in form of a two-dimensional integer grid where 1 represents land and 0 represents water. 
+//Grid cells are connected horizontally/vertically (not diagonally). 
+//The grid is completely surrounded by water, and there is exactly one island (i.e., one or more connected land cells). 
+//The island doesn't have "lakes" (water inside that isn't connected to the water around the island). 
+//One cell is a square with side length 1. The grid is rectangular, width and height don't exceed 100. 
+//Determine the perimeter of the island.
+
+public class Solution {
+    public int islandPerimeter(int[][] grid) {
+        int length = grid.length;
+        int width = grid[0].length;
+        int landCount = 0;
+        int adjLand = 0;
+        for(int i = 0; i < length; i++){
+            for(int j = 0; j < width; j++){
+                if(grid[i][j] == 1){
+                    landCount++;
+                }
+                if(j < width-1 && grid[i][j] == grid[i][j+1] && grid[i][j] == 1){
+                    adjLand++;
+                }
+                if(i < length-1 && grid[i][j] == grid[i+1][j] && grid[i][j] == 1){
+                    adjLand++;
+                }
+            }
+        }
+        return 4 * landCount - 2 * adjLand;
+    }
+}
+------------------------------------
+
+//292. Nim Game
+
+//You are playing the following Nim Game with your friend: There is a heap of stones on the table, each time one of you take turns to remove 1 to 3 stones. 
+//The one who removes the last stone will be the winner. You will take the first turn to remove the stones.
+//Both of you are very clever and have optimal strategies for the game. 
+//Write a function to determine whether you can win the game given the number of stones in the heap.
+
+public class Solution {
+    public boolean canWinNim(int n) {
+        if(n % 4 == 0){
+            return false;
+        }
+        return true;
+    }
+}
+-----------------------------
+
+//485. Max Consecutive Ones
+
+//Given a binary array, find the maximum number of consecutive 1s in this array.
+
+public class Solution {
+    public int findMaxConsecutiveOnes(int[] nums) {
+        int max = 0;
+        int count = 0;
+        for(int i = 0; i < nums.length; i++){
+            if(nums[i] == 1){
+                count++;
+            }
+            if(nums[i] == 0){
+                if(count > max){
+                    max = count;
+                }
+                count = 0;
+            }
+        }
+        return max > count ? max : count;
+    }
+}
+---------------------------
+
+//136. Single Number
+
+//Given an array of integers, every element appears twice except for one. Find that single one.
+//Note: Your algorithm should have a linear runtime complexity. Could you implement it without using extra memory?
+
+public class Solution {
+    public int singleNumber(int[] nums) {
+        int ret = 0;
+        for(int i = 0; i < nums.length; i++){
+            ret ^= nums[i];
+        }
+        return ret;
+    }
+}
+--------------------------
+
+//520. Detect Capital
+
+//Given a word, you need to judge whether the usage of capitals in it is right or not.
+//We define the usage of capitals in a word to be right when one of the following cases holds:
+//All letters in this word are capitals, like "USA".
+//All letters in this word are not capitals, like "leetcode".
+//Only the first letter in this word is capital if it has more than one letter, like "Google".
+//Otherwise, we define that this word doesn't use capitals in a right way.
+
+public class Solution {
+    public boolean detectCapitalUse(String word) {
+        if(word.toUpperCase().equals(word)) return true;
+        if(word.toLowerCase().equals(word)) return true;
+        char[] word_char = word.toCharArray();
+        word_char[0] = String.valueOf(word_char[0]).toLowerCase().charAt(0);
+        if(String.valueOf(word_char).equals(word.toLowerCase())) return true;
+        return false;
+    }
+}
+---------------------------
+
+//448. Find All Numbers Disappeared in an Array
+
+//Given an array of integers where 1 ≤ a[i] ≤ n (n = size of array), some elements appear twice and others appear once.
+//Find all the elements of [1, n] inclusive that do not appear in this array.
+//Could you do it without extra space and in O(n) runtime? You may assume the returned list does not count as extra space.
+
+public class Solution {
+    public List<Integer> findDisappearedNumbers(int[] nums) {
+        List<Integer> ret = new ArrayList<>();
+        for(int i = 0; i < nums.length; i++){
+            int k = Math.abs(nums[i]) - 1;
+            if(nums[k] > 0) nums[k] = -nums[k];
+        }
+        for(int i = 0; i < nums.length; i++){
+            if(nums[i] > 0) ret.add(i+1);
+        }
+        return ret;
+    }
+}
+----------------------------
+
+//521. Longest Uncommon Subsequence I
+
+//Given a group of two strings, you need to find the longest uncommon subsequence of this group of two strings. 
+//The longest uncommon subsequence is defined as the longest subsequence of one of these strings 
+//and this subsequence should not be any subsequence of the other strings.
+//The input will be two strings, and the output needs to be the length of the longest uncommon subsequence. 
+//If the longest uncommon subsequence doesn't exist, return -1.
+
+public class Solution {
+    public int findLUSlength(String a, String b) {
+        return a.equals(b) ? -1 : Math.max(a.length(), b.length());
+    }
+}
+--------------------------
+
+//104. Maximum Depth of Binary Tree
+
+//Given a binary tree, find its maximum depth.
+//The maximum depth is the number of nodes along the longest path from the root node down to the farthest leaf node.
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public int maxDepth(TreeNode root) {
+        if(root == null) return 0;
+        return Math.max(maxDepth(root.left), maxDepth(root.right)) + 1;
+    }
+}
+------------------------------
+
+//389. Find the Difference
+
+//Given two strings s and t which consist of only lowercase letters.
+//String t is generated by random shuffling string s and then add one more letter at a random position.
+//Find the letter that was added in t.
+
+public class Solution {
+    public char findTheDifference(String s, String t) {
+        char ret = 0;
+        for(int i = 0; i < s.length(); i++){
+            ret ^= s.charAt(i);
+            ret ^= t.charAt(i);
+        }
+        ret ^= t.charAt(t.length()-1);
+        return ret;
+    }
+}
+------------------------------
+
+//371. Sum of Two Integers
+
+//Calculate the sum of two integers a and b, but you are not allowed to use the operator + and -.
+
+public class Solution {
+    public int getSum(int a, int b) {
+        return (b == 0) ? a : getSum(a^b, (a&b)<<1);
+    }
+}
+---------------------------
+
+//226. Invert Binary Tree
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public TreeNode invertTree(TreeNode root) {
+        if(root == null) return null;
+        TreeNode tmp = root.left;
+        root.left = root.right;
+        root.right = tmp;
+        invertTree(root.left);
+        invertTree(root.right);
+        return root;
+    }
+}
+----------------------------
+
+//258. Add Digits
+
+//Given a non-negative integer num, repeatedly add all its digits until the result has only one digit.
+//Could you do it without any loop/recursion in O(1) runtime?
+
+public class Solution {
+    public int addDigits(int num) {
+        return (num == 0) ? 0 : ((num % 9 == 0) ? 9 : num%9);
+    }
+}
+----------------------------
+
+//283. Move Zeroes
+
+//Given an array nums, write a function to move all 0's to the end of it while maintaining the relative order of the non-zero elements.
+//You must do this in-place without making a copy of the array.
+//Minimize the total number of operations.
+
+public class Solution {
+    public void moveZeroes(int[] nums) {
+        int i = 0;
+        int j = 0;
+        for(int k = 0; k < nums.length; k++){
+            if(nums[k] == 0){
+                j = k;
+                i = k + 1;
+                break;
+            }
+        }
+        while(i < nums.length && j < nums.length){
+            if(nums[i] != 0){
+                int tmp = nums[i];
+                nums[i] = nums[j];
+                nums[j] = tmp;
+                j++;
+            }
+            i++;
+        }
+    }
+}
+---------------------------
+public class Solution {
+    public void moveZeroes(int[] nums) {
+        int i = 0;
+        for(int num : nums){
+            if(num != 0){
+                nums[i++] = num;
+            }
+        }
+        while(i < nums.length){
+            nums[i++] = 0;
+        }
+    }
+}
+----------------------------
+
+//492. Construct the Rectangle
+
+//For a web developer, it is very important to know how to design a web page's size. 
+//So, given a specific rectangular web page’s area, your job by now is to design a rectangular web page, whose length L and width W satisfy the following requirements:
+//1. The area of the rectangular web page you designed must equal to the given target area.
+//2. The width W should not be larger than the length L, which means L >= W.
+//3. The difference between length L and width W should be as small as possible.
+//You need to output the length L and the width W of the web page you designed in sequence.
+
+public class Solution {
+    public int[] constructRectangle(int area) {
+        int width = (int) Math.sqrt(area);
+        while(width > 0 && area % width != 0){
+            width--;
+        }
+        int length = area / width;
+        return new int[] {length, width};
+    }
+}
+--------------------------------
+
+//563. Binary Tree Tilt
+
+//Given a binary tree, return the tilt of the whole tree.
+//The tilt of a tree node is defined as the absolute difference between the sum of all left subtree node values 
+//and the sum of all right subtree node values. Null node has tilt 0.
+//The tilt of the whole tree is defined as the sum of all nodes' tilt.
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    int tilt;
+    
+    public int findTilt(TreeNode root) {
+        sum(root);
+        return tilt;
+    }
+    
+    public int sum(TreeNode root){
+        if(root == null) return 0;
+        int leftSum = sum(root.left);
+        int rightSum = sum(root.right);
+        tilt += Math.abs(leftSum - rightSum);
+        return leftSum + rightSum + root.val;
+    }
+}
+-----------------------------------
+
+//530. Minimum Absolute Difference in BST
+
+//Given a binary search tree with non-negative values, find the minimum absolute difference between values of any two nodes.
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    int min = Integer.MAX_VALUE;
+    TreeNode prev;
+    
+    public int getMinimumDifference(TreeNode root) {
+        inorder(root);
+        return min;
+    }
+    
+    public void inorder(TreeNode root){
+        if(root == null) return;
+        inorder(root.left);
+        if(prev != null) min = Math.min(min, root.val-prev.val);
+        prev = root;
+        inorder(root.right);
+    }
+}
+-----------------------------------
+
+//167. Two Sum II - Input array is sorted
+
+//Given an array of integers that is already sorted in ascending order, find two numbers such that they add up to a specific target number.
+//The function twoSum should return indices of the two numbers such that they add up to the target, where index1 must be less than index2. 
+//Please note that your returned answers (both index1 and index2) are not zero-based.
+//You may assume that each input would have exactly one solution and you may not use the same element twice.
+
+public class Solution {
+    public int[] twoSum(int[] numbers, int target) {
+        int[] ret = new int[2];
+        int i = 0;
+        int j = numbers.length-1;
+        while(i < j){
+            if(numbers[i] + numbers[j] == target){
+            ret[0] = i+1;
+            ret[1] = j+1;
+            break;
+            }else if(numbers[i] + numbers[j] > target){
+                j--;
+            }else{
+                i++;
+            }
+        }
+        
+        return ret;
+    }
+}
+------------------------------------
+
+//455. Assign Cookies
+
+//Assume you are an awesome parent and want to give your children some cookies. But, you should give each child at most one cookie. 
+//Each child i has a greed factor gi, which is the minimum size of a cookie that the child will be content with; and each cookie j has a size sj. 
+//If sj >= gi, we can assign the cookie j to the child i, and the child i will be content. 
+//Your goal is to maximize the number of your content children and output the maximum number.
+//You may assume the greed factor is always positive. 
+//You cannot assign more than one cookie to one child.
+
+public class Solution {
+    public int findContentChildren(int[] g, int[] s) {
+        Arrays.sort(g);
+        Arrays.sort(s);
+        int i = 0;
+        int j = 0;
+        int count = 0;
+        while(i < g.length && j < s.length){
+            if(g[i] <= s[j]){
+                count++;
+                i++;
+                j++;
+            }else{
+                j++;
+            }
+        }
+        return count;
+    }
+}
+----------------------------------
+
+//506. Relative Ranks
+
+//Given scores of N athletes, find their relative ranks and the people with the top three highest scores, who will be awarded medals: "Gold Medal", "Silver Medal" and "Bronze Medal".
+
+public class Solution {
+    public String[] findRelativeRanks(int[] nums) {
+        Map<Integer, Integer> scoreRank = new HashMap<>();
+        List<String> rank = new ArrayList<>();
+        Integer[] scores = new Integer[nums.length];
+        for(int i = 0; i <nums.length; i++){
+            scores[i] = nums[i];
+        }
+        Arrays.sort(scores, Collections.reverseOrder());
+         
+        for(int i = 0; i < scores.length; i++){
+            scoreRank.put(scores[i], i+1);
+        }
+        for(int num : nums){
+            int rk = scoreRank.get(num);
+            if(rk == 1){
+                rank.add("Gold Medal");
+            }else if(rk == 2){
+                rank.add("Silver Medal");
+            }else if(rk == 3){
+                rank.add("Bronze Medal");
+            }else{
+                rank.add(String.valueOf(rk));
+                //rank.add(rk+"");
+            }
+        }
+        return rank.toArray(new String[0]);
+    }
+}
+-------------------------------
+
+//453. Minimum Moves to Equal Array Elements
+
+//Given a non-empty integer array of size n, find the minimum number of moves required to make all array elements equal, where a move is incrementing n - 1 elements by 1.
+
+public class Solution {
+    public int minMoves(int[] nums) {
+        int count = 0;
+        Arrays.sort(nums);
+        while(nums[0] != nums[nums.length-1]){
+            for(int i = 0; i < nums.length-1; i++){
+                nums[i] += 1;
+            }
+            Arrays.sort(nums);
+            count++;
+        }
+        return count;
+    }
+}
+--------------------------------------
+public class Solution {
+    public int minMoves(int[] nums) {
+        int min = nums[0];
+        int sum = 0;
+        for(int num : nums){
+            min = Math.min(min, num);
+            sum += num;
+        }
+        return sum - nums.length*min;
+    }
+}
+---------------------------------
+
+//349. Intersection of Two Arrays
+
+//Given two arrays, write a function to compute their intersection.
+//Each element in the result must be unique.
+//The result can be in any order.
+
+public class Solution {
+    public int[] intersection(int[] nums1, int[] nums2) {
+        Set<Integer> set1 = new HashSet<>();
+        Set<Integer> set2 = new HashSet<>();
+        for(int num : nums1){
+            set1.add(num);
+        }
+        for(int num : nums2){
+            if(set1.contains(num)){
+                set2.add(num);
+            }
+        }
+        int[] ret = new int[set2.size()];
+        int i = 0;
+        for(int num : set2){
+            ret[i++] = num;
+        }
+        return ret;
+    }
+}
+-------------------------------
+
+//383. Ransom Note
+
+//Given an arbitrary ransom note string and another string containing letters from all the magazines, 
+//write a function that will return true if the ransom note can be constructed from the magazines ; 
+//otherwise, it will return false.
+//Each letter in the magazine string can only be used once in your ransom note.
+
+public class Solution {
+    public boolean canConstruct(String ransomNote, String magazine) {
+        int[] count = new int[26];
+        for(int i = 0; i < magazine.length(); i++){
+            count[magazine.charAt(i)-'a']++;
+        }
+        for(int i = 0; i < ransomNote.length(); i++){
+            count[ransomNote.charAt(i)-'a']--;
+            if(count[ransomNote.charAt(i)-'a'] < 0) return false;
+        }
+        return true;
+    }
+}
+--------------------------------
+
+//404. Sum of Left Leaves
+
+//Find the sum of all left leaves in a given binary tree.
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public int sumOfLeftLeaves(TreeNode root) {
+        if(root == null) return 0;
+        int sum = 0;
+        if(root.left != null){
+            if(root.left.left == null && root.left.right == null){
+                sum += root.left.val;
+            }else{
+                sum += sumOfLeftLeaves(root.left);
+            }
+        }
+        sum += sumOfLeftLeaves(root.right);
+        return sum;
+    }
+}
+-----------------------------
+
+//387. First Unique Character in a String
+
+//Given a string, find the first non-repeating character in it and return it's index. If it doesn't exist, return -1.
+
+public class Solution {
+    public int firstUniqChar(String s) {
+        int[] count = new int[26];
+        for(int i = 0; i < s.length(); i++){
+            count[s.charAt(i)-'a']++;
+        }
+        for(int i = 0; i < s.length(); i++){
+            if(count[s.charAt(i)-'a'] == 1) return i;
+        }
+        return -1;
+    }
+}
+---------------------------------
+
+//122. Best Time to Buy and Sell Stock II
+
+//Say you have an array for which the ith element is the price of a given stock on day i.
+//Design an algorithm to find the maximum profit. You may complete as many transactions as you like (ie, buy one and sell one share of the stock multiple times). 
+//However, you may not engage in multiple transactions at the same time (ie, you must sell the stock before you buy again).
+
+public class Solution {
+    public int maxProfit(int[] prices) {
+        int profit = 0;
+        int buy = 0;
+        int sell = 0;
+        boolean canBuy = true;
+        boolean canSell = false;
+        for(int i = 0; i < prices.length-1; i++){
+            if(prices[i] < prices[i+1] && canBuy){
+                buy = prices[i];
+                canBuy = false;
+                canSell = true;
+            }
+            if(prices[i] > prices[i+1] && canSell){
+                sell = prices[i];
+                canBuy = true;
+                canSell = false;
+                profit += sell-buy;
+            }
+        }
+        if(canSell) profit += prices[prices.length-1]-buy;
+        return profit;
+    }
+}
+----------------------------------
+public class Solution {
+    public int maxProfit(int[] prices) {
+        int profit = 0;
+        for(int i = 0; i < prices.length-1; i++){
+            if(prices[i] < prices[i+1]) profit += prices[i+1]-prices[i];
+        }
+        return profit;
+    }
+}
+-----------------------------
+
+//171. Excel Sheet Column Number
+
+//Given a column title as appear in an Excel sheet, return its corresponding column number.
+
+public class Solution {
+    public int titleToNumber(String s) {
+        int num = 0;
+        int l = s.length();
+        for(int i = 0; i < s.length(); i++){
+            num += (s.charAt(i)-'A'+1)*Math.pow(26, l-1);
+            l--;
+        }
+        return num;
+    }
+}
+---------------------------
+
+//237. Delete Node in a Linked List
+
+//Write a function to delete a node (except the tail) in a singly linked list, given only access to that node.
+//Supposed the linked list is 1 -> 2 -> 3 -> 4 and you are given the third node with value 3, 
+//the linked list should become 1 -> 2 -> 4 after calling your function.
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public void deleteNode(ListNode node) {
+        if(node.next == null) return;
+        node.val = node.next.val;
+        node.next = node.next.next;
+    }
+}
+------------------------------
+
+//100. Same Tree
+
+//Given two binary trees, write a function to check if they are equal or not.
+//Two binary trees are considered equal if they are structurally identical and the nodes have the same value.
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public boolean isSameTree(TreeNode p, TreeNode q) {
+        if(p == null && q == null) return true;
+        if(p == null || q == null) return false;
+        if(p.val == q.val) return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+        
+        return false;
+    }
+}
+---------------------------
+
+//169. Majority Element
+
+//Given an array of size n, find the majority element. The majority element is the element that appears more than ⌊ n/2 ⌋ times.
+
+public class Solution {
+    public int majorityElement(int[] nums) {
+        Map<Integer, Integer> count = new HashMap<>();
+        for(int i = 0; i < nums.length; i++){
+            count.put(nums[i], count.getOrDefault(nums[i], 0)+1);
+            if(count.get(nums[i]) > nums.length/2) return nums[i];
+        }
+        return -1;
+    }
+}
+----------------------------
+
+//242. Valid Anagram
+
+//Given two strings s and t, write a function to determine if t is an anagram of s.
+//You may assume the string contains only lowercase alphabets.
+
+public class Solution {
+    public boolean isAnagram(String s, String t) {
+        if(s.length() != t.length()) return false;
+        int[] count = new int[26];
+        for(int i = 0; i < s.length(); i++){
+            count[s.charAt(i)-'a']++;
+        }
+        for(int i = 0; i < t.length(); i++){
+            count[t.charAt(i)-'a']--;
+            if(count[t.charAt(i)-'a'] < 0) return false;
+        }
+        return true;
+    }
+}
+-------------------------------
+
+//504. Base 7 Add to List
+
+//Given an integer, return its base 7 string representation.
+
+public class Solution {
+    public String convertToBase7(int num) {
+        return Integer.toString(num, 7);
+    }
+}
+-----------------------------
+
+//409. Longest Palindrome
+
+//Given a string which consists of lowercase or uppercase letters, find the length of the longest palindromes that can be built with those letters.
+//This is case sensitive, for example "Aa" is not considered a palindrome here.
+
+public class Solution {
+    public int longestPalindrome(String s) {
+        int length = 0;
+        boolean flag = false;
+        Map<Character, Integer> count = new HashMap<>();
+        for(int i = 0; i < s.length(); i++){
+            count.put(s.charAt(i), count.getOrDefault(s.charAt(i), 0)+1);
+        }
+        for(char key : count.keySet().toArray(new Character[0])){
+            length += count.get(key)/2*2;
+            if(count.get(key)%2 == 1) flag = true;
+        }
+        if(flag) length += 1;
+        return length;
+    }
+}
+--------------------------
+public class Solution {
+    public int longestPalindrome(String s) {
+        Set<Character> set = new HashSet<>();
+        int count = 0;
+        for(int i = 0; i < s.length(); i++){
+            if(set.contains(s.charAt(i))){
+                set.remove(s.charAt(i));
+                count += 2;
+            }else{
+                set.add(s.charAt(i));
+            }
+        }
+        if(!set.isEmpty()) count += 1;
+        return count;
+    }
+}
+-----------------------------
+
+//617. Merge Two Binary Trees
+
+//Given two binary trees and imagine that when you put one of them to cover the other, 
+//some nodes of the two trees are overlapped while the others are not.
+//You need to merge them into a new binary tree. 
+//The merge rule is that if two nodes overlap, then sum node values up as the new value of the merged node. 
+//Otherwise, the NOT null node will be used as the node of new tree.
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public TreeNode mergeTrees(TreeNode t1, TreeNode t2) {
+        if(t1 == null && t2 == null) return null;
+        int val = (t1==null ? 0 : t1.val) + (t2==null ? 0 : t2.val);
+        TreeNode newNode = new TreeNode(val);
+        newNode.left = mergeTrees(t1==null ? null : t1.left, t2==null ? null : t2.left);
+        newNode.right = mergeTrees(t1==null ? null : t1.right, t2==null ? null : t2.right);
+        
+        return newNode;
+    }
+}
+----------------------------------
+
+//606. Construct String from Binary Tree
+
+//You need to construct a string consists of parenthesis and integers from a binary tree with the preorder traversing way.
+//The null node needs to be represented by empty parenthesis pair "()". 
+//And you need to omit all the empty parenthesis pairs that don't affect the one-to-one mapping relationship 
+//between the string and the original binary tree.
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public String tree2str(TreeNode t) {
+        if(t == null) return "";
+        String ret = t.val + "";
+        String left = tree2str(t.left);
+        String right = tree2str(t.right);
+        if(left == "" && right == "") return ret;
+        if(left == "") return ret = ret + "()" + "(" + right + ")";
+        if(right == "") return ret = ret + "(" + left + ")";
+        return ret = ret + "(" + left + ")" + "(" + right + ")";
+    }
+}
+-------------------------------
+
+//599. Minimum Index Sum of Two Lists
+
+//Suppose Andy and Doris want to choose a restaurant for dinner, 
+//and they both have a list of favorite restaurants represented by strings.
+//You need to help them find out their common interest with the least list index sum. 
+//If there is a choice tie between answers, output all of them with no order requirement. 
+//You could assume there always exists an answer.
+
+public class Solution {
+    public String[] findRestaurant(String[] list1, String[] list2) {
+        Map<String, Integer> map = new HashMap();
+        List<String> ret = new LinkedList();
+        int min = Integer.MAX_VALUE;
+        for(int i = 0; i < list1.length; i++) map.put(list1[i], i);
+        for(int i =0; i < list2.length; i++){
+            Integer j = map.get(list2[i]);
+            if(j != null && i+j <= min){
+                if(i+j < min){
+                    min = i+j;
+                    ret = new LinkedList();
+                }
+                ret.add(list2[i]);
+            }
+        }
+        return ret.toArray(new String[ret.size()]);
+    }
+}
+-----------------------------
+
+//598. Range Addition II
+
+//Given an m * n matrix M initialized with all 0's and several update operations.
+//Operations are represented by a 2D array, and each operation is represented by an array with two positive integers a and b, 
+//which means M[i][j] should be added by one for all 0 <= i < a and 0 <= j < b.
+//You need to count and return the number of maximum integers in the matrix after performing all the operations.
+
+public class Solution {
+    public int maxCount(int m, int n, int[][] ops) {
+        if(ops.length == 0) return m * n;
+        int a = Integer.MAX_VALUE;
+        int b = Integer.MAX_VALUE;
+        for(int i = 0; i < ops.length; i++){
+            if(ops[i][0] < a) a = ops[i][0];
+            if(ops[i][1] < b) b = ops[i][1];
+        }
+        return a * b;
+    }
+}
+-----------------------------
+
+//217. Contains Duplicate
+
+//Given an array of integers, find if the array contains any duplicates. 
+//Your function should return true if any value appears at least twice in the array, 
+//and it should return false if every element is distinct.
+
+public class Solution {
+    public boolean containsDuplicate(int[] nums) {
+        Set<Integer> set = new HashSet<>();
+        for(int num : nums){
+            if(!set.add(num)) return true;
+        }
+        return false;
+    }
+}
+-------------------------
+
+//13. Roman to Integer
+
+//Given a roman numeral, convert it to an integer.
+//Input is guaranteed to be within the range from 1 to 3999.
+
+public class Solution {
+    public int romanToInt(String s) {
+        int ret = 0;
+        int num[] = new int[s.length()];
+        for(int i = 0; i < s.length(); i++){
+            switch(s.charAt(i)){
+                case 'M':
+                    num[i] = 1000;
+                    break;
+                case 'D':
+                    num[i] = 500;
+                    break;
+                case 'C':
+                    num[i] = 100;
+                    break;
+                case 'L':
+                    num[i] = 50;
+                    break;
+                case 'X':
+                    num[i] = 10;
+                    break;
+                case 'V':
+                    num[i] = 5;
+                    break;
+                case 'I':
+                    num[i] = 1;
+                    break;
+            }
+        }
+        for(int i = 0; i < num.length-1; i++){
+            if(num[i]<num[i+1]) ret -= num[i];
+            else ret += num[i];
+        }
+        ret += num[num.length-1];
+        return ret;
+    }
+}
+-----------------------------
+
+//206. Reverse Linked List
+
+//Reverse a singly linked list.
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public ListNode reverseList(ListNode head) {
+        ListNode newHead = null;
+        while(head != null){
+            ListNode next = head.next;
+            head.next = newHead;
+            newHead = head;
+            head = next;
+        }
+        return newHead;
+    }
+}
+-----------------------------
+
+//401. Binary Watch
+
+//A binary watch has 4 LEDs on the top which represent the hours (0-11), and the 6 LEDs on the bottom represent the minutes (0-59).
+//Each LED represents a zero or one, with the least significant bit on the right.
+//Given a non-negative integer n which represents the number of LEDs that are currently on, return all possible times the watch could represent.
+
+public class Solution {
+    public List<String> readBinaryWatch(int num) {
+        List<String> time = new ArrayList<>();
+        for(int h = 0; h < 12; h++){
+            for(int m = 0; m < 60; m++){
+                if(Integer.bitCount(h*64+m) == num) 
+                    time.add(String.format("%d:%02d", h, m));
+            }
+        }
+        return time;
+    }
+}
+--------------------------
+
+//350. Intersection of Two Arrays II
+
+//Given two arrays, write a function to compute their intersection.
+//Each element in the result should appear as many times as it shows in both arrays.
+//The result can be in any order.
+
+public class Solution {
+    public int[] intersect(int[] nums1, int[] nums2) {
+        Arrays.sort(nums1);
+        Arrays.sort(nums2);
+        int p1 = 0;
+        int p2 = 0;
+        List<Integer> num = new ArrayList<>();
+        while(p1 < nums1.length && p2 < nums2.length){
+            if(nums1[p1] < nums2[p2]){
+                p1++;
+            }
+            else{
+                if(nums1[p1] > nums2[p2]){
+                    p2++;
+                }
+                else{
+                    num.add(nums1[p1]);
+                    p1++;
+                    p2++;
+                }
+            }
+        }
+        int[] ret = new int[num.size()];
+        for(int i = 0; i < ret.length; i++){
+            ret[i] = num.get(i);
+        }
+        return ret;
+    }
+}
+------------------------------
+
+//447. Number of Boomerangs
+
+//Given n points in the plane that are all pairwise distinct, a "boomerang" is a tuple of points (i, j, k) such that 
+//the distance between i and j equals the distance between i and k (the order of the tuple matters).
+//Find the number of boomerangs. You may assume that n will be at most 500 and coordinates of points are all in the range [-10000, 10000] (inclusive).
+
+public class Solution {
+    public int numberOfBoomerangs(int[][] points) {
+        int num = 0;
+        Map<Integer, Integer> map = new HashMap<>();
+        for(int i = 0; i < points.length; i++){
+            for(int j = 0; j < points.length; j++){
+                if(i==j) continue;
+                int d = getDistance(points[i], points[j]);
+                map.put(d, map.getOrDefault(d, 0)+1);
+            }
+            for(int val : map.values()){
+                num += val*(val-1);
+            }
+            map.clear();
+        }
+        return num;
+    }
+    
+    private int getDistance(int[] a, int[] b){
+        int x = a[0] - b[0];
+        int y = a[1] - b[1];
+        return x*x + y*y;
+    }
+}
+----------------------------
+
+//268. Missing Number
+
+//Given an array containing n distinct numbers taken from 0, 1, 2, ..., n, find the one that is missing from the array.
+//Your algorithm should run in linear runtime complexity. Could you implement it using only constant extra space complexity?
+
+public class Solution {
+    public int missingNumber(int[] nums) {
+        Set<Integer> set = new HashSet<>();
+        for(int i = 0; i < nums.length; i++){
+            set.add(nums[i]);
+        }
+        for(int i = 0; i < nums.length; i++){
+            if(!set.contains(nums[i]+1)){
+                if(nums[i]+1 <= nums.length){
+                    return nums[i]+1;
+                }
+            }
+        }
+        return 0;
+    }
+}
+------------------------------
+public class Solution {
+    public int missingNumber(int[] nums) {
+        int sum = 0;
+        for(int i = 0; i < nums.length; i++){
+            sum += nums[i];
+        }
+        int addSum = nums.length*(nums.length+1)/2;
+        return addSum - sum;
+    }
+}
+---------------------------
+public class Solution {
+    public int missingNumber(int[] nums) {
+        int ret = nums.length;
+        for(int i = 0; i < nums.length; i++){
+            ret ^= i;
+            ret ^= nums[i];
+        }
+        return ret;
+    }
+}
+-------------------------
+
+//541. Reverse String II
+
+//Given a string and an integer k, you need to reverse the first k characters for every 2k characters counting from the start of the string. 
+//If there are less than k characters left, reverse all of them. 
+//If there are less than 2k but greater than or equal to k characters, then reverse the first k characters and left the other as original.
+
+public class Solution {
+    public String reverseStr(String s, int k) {
+        char[] arr = s.toCharArray();
+        int n = arr.length;
+        int i = 0;
+        while(i < n){
+            int j = Math.min(i+k-1, n-1);
+            reverse(arr, i, j);
+            i += 2*k;
+        }
+        return String.valueOf(arr);
+    }
+    
+    private void reverse(char[] arr, int i, int j){
+        while(i < j){
+            char tmp = arr[i];
+            arr[i++] = arr[j];
+            arr[j--] = tmp;
+        }
+    }
+}
+-------------------------
+
+//551. Student Attendance Record I
+
+//You are given a string representing an attendance record for a student. The record only contains the following three characters:
+//'A' : Absent.
+//'L' : Late.
+//'P' : Present.
+//A student could be rewarded if his attendance record doesn't contain more than one 'A' (absent) or more than two continuous 'L' (late).
+//You need to return whether the student could be rewarded according to his attendance record.
+
+public class Solution {
+    public boolean checkRecord(String s) {
+        int Acount = 0;
+        int Lcount = 0;
+        for(int i = 0; i < s.length(); i++){
+            if(s.charAt(i) == 'A'){
+                Acount++;
+                Lcount = 0;
+            }
+            else if(s.charAt(i) == 'L'){
+                Lcount++;
+            }
+            else{
+                Lcount = 0;
+            }
+            if(Acount>1 ||Lcount>2) return false;
+        }
+        return true;
+    }
+}
+-----------------------
+public class Solution {
+    public boolean checkRecord(String s) {
+        if(s.indexOf('A') != s.lastIndexOf('A') || s.contains("LLL")) return false;
+        return true;
+    }
+}
+-----------------------
+public class Solution {
+    public boolean checkRecord(String s) {
+        return !s.matches(".*A.*A.*|.*LLL.*");
+    }
+}
+---------------------
+
+//543. Diameter of Binary Tree
+
+//Given a binary tree, you need to compute the length of the diameter of the tree. 
+//The diameter of a binary tree is the length of the longest path between any two nodes in a tree. 
+//This path may or may not pass through the root.
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    int max = 0;
+    
+    public int diameterOfBinaryTree(TreeNode root) {
+        maxDepth(root);
+        return max;
+    }
+    
+    private int maxDepth(TreeNode root){
+        if(root == null) return 0;
+        int left = maxDepth(root.left);
+        int right = maxDepth(root.right);
+        max = Math.max(left + right, max);
+        return Math.max(left, right) + 1;
+    }
+}
+--------------------------
+
+//108. Convert Sorted Array to Binary Search Tree
+
+//Given an array where elements are sorted in ascending order, convert it to a height balanced BST.
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public TreeNode sortedArrayToBST(int[] nums) {
+        if(nums.length == 0) return null;
+        int l = nums.length;
+        TreeNode root = toBST(nums, 0, l-1);
+        return root;
+    }
+    
+    private TreeNode toBST(int[] nums, int left, int right){
+        if(left > right) return null;
+        int val = nums[(right+left)/2];
+        TreeNode root = new TreeNode(val);
+        root.left = toBST(nums, left, (right+left)/2-1);
+        root.right = toBST(nums, (right+left)/2+1, right);
+        return root;
+    }
+}
+---------------------
+
+//572. Subtree of Another Tree
+
+//Given two non-empty binary trees s and t, check whether tree t has exactly the same structure and node values with a subtree of s. 
+//A subtree of s is a tree consists of a node in s and all of this node's descendants. 
+//The tree s could also be considered as a subtree of itself.
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public boolean isSubtree(TreeNode s, TreeNode t) {
+        if(s == null && t == null) return true;
+        if(s == null) return false;
+        if(isSame(s, t)) return true;
+        return isSubtree(s.left, t) || isSubtree(s.right, t);
+    }
+    
+    private boolean isSame(TreeNode s, TreeNode t){
+        if(s == null && t == null) return true;
+        if(s == null || t == null) return false;
+        if(s.val != t.val) return false;
+        return isSame(s.left, t.left) && isSame(s.right, t.right);
+    }
+}
+-----------------------
+
+//415. Add Strings
+
+//Given two non-negative integers num1 and num2 represented as string, return the sum of num1 and num2.
+//The length of both num1 and num2 is < 5100.
+//Both num1 and num2 contains only digits 0-9.
+//Both num1 and num2 does not contain any leading zero.
+//You must not use any built-in BigInteger library or convert the inputs to integer directly.
+
+public class Solution {
+    public String addStrings(String num1, String num2) {
+        StringBuilder sum = new StringBuilder();
+        int v = 0;
+        int c = 0;
+        for(int i = num1.length()-1, j = num2.length()-1; i >= 0 || j >= 0 || c == 1; i--, j--){
+            int a = i<0 ? 0 : num1.charAt(i)-'0';
+            int b = j<0 ? 0 : num2.charAt(j)-'0';
+            v = (a+b+c)%10;
+            c = (a+b+c)/10;
+            sum.append(v);
+        }
+        return sum.reverse().toString();
+    }
+}
+-------------------
+
+//405. Convert a Number to Hexadecimal
+
+//Given an integer, write an algorithm to convert it to hexadecimal. For negative integer, two’s complement method is used.
+//All letters in hexadecimal (a-f) must be in lowercase.
+//The hexadecimal string must not contain extra leading 0s. If the number is zero, it is represented by a single zero character '0'; 
+//otherwise, the first character in the hexadecimal string will not be the zero character.
+//The given number is guaranteed to fit within the range of a 32-bit signed integer.
+//You must not use any method provided by the library which converts/formats the number to hex directly.
+
+public class Solution {
+    public String toHex(int num) {
+        if(num == 0) return "0";
+        char[] hex = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'};
+        String ret = "";
+        while(num != 0){
+            ret =  hex[num & 15] + ret;
+            num = num >>> 4;
+        }
+        return ret;
+    }
+}
+--------------------------
+
+//121. Best Time to Buy and Sell Stock
+
+//Say you have an array for which the ith element is the price of a given stock on day i.
+//If you were only permitted to complete at most one transaction (ie, buy one and sell one share of the stock), 
+//design an algorithm to find the maximum profit.
+
+public class Solution {
+    public int maxProfit(int[] prices) {
+        if(prices.length == 0) return 0;
+        int min = prices[0];
+        int max = prices[0];
+        int profit = 0;
+        for(int i=0; i<prices.length; i++){
+            if(prices[i]<min){
+                min = prices[i];
+                max = min;
+            }
+            else if(prices[i]>max){
+                max = prices[i];
+                profit = Math.max(profit, (max-min));
+            }
+        }
+        return profit;
+    }
+}
+------------------------
+
+//202. Happy Number
+
+//Write an algorithm to determine if a number is "happy".
+//A happy number is a number defined by the following process: 
+//Starting with any positive integer, replace the number by the sum of the squares of its digits, 
+//and repeat the process until the number equals 1 (where it will stay), or it loops endlessly in a cycle which does not include 1. 
+//Those numbers for which this process ends in 1 are happy numbers.
+
+public class Solution {
+    public boolean isHappy(int n) {
+        Set<Integer> set = new HashSet<>();
+        int num = n;
+        while(num > 1){
+            num = cal(num);
+            if(num == 1) return true;
+            if(set.contains(num)) return false;
+            else{
+                set.add(num);
+            }
+        }
+        return true;
+    }
+    private int cal(int n){
+        int sum = 0;
+        int v = n;
+        while(v > 0){
+            sum = sum + (v%10) * (v%10);
+            v /= 10;
+        }
+        return sum;
+    }
+}
+------------------------
+public class Solution {
+    public boolean isHappy(int n) {
+        int x = n;
+        int y = n;
+        while(x > 1){
+            x = cal(x);
+            if(x == 1) return true;
+            y = cal(cal(y));
+            if(y == 1) return true;
+            if(y == x) return false;
+        }
+        return true;
+    }
+    private int cal(int n){
+        int sum = 0;
+        int v = n;
+        while(v > 0){
+            sum = sum + (v%10) * (v%10);
+            v /= 10;
+        }
+        return sum;
+    }
+}
+---------------------
+
+//326. Power of Three
+
+//Given an integer, write a function to determine if it is a power of three.
+//Follow up: Could you do it without using any loop / recursion?
+
+public class Solution {
+    public boolean isPowerOfThree(int n) {
+        if(n <= 0) return false;
+        while(n > 1){
+            if(n % 3 == 0){
+                n /= 3;
+            }
+            else return false;
+        }
+        return true;
+    }
+}
+----------------------
+public class Solution {
+    public boolean isPowerOfThree(int n) {
+        //1162261467 is 3^19, the max power of 3 in int
+        return n > 0 && 1162261467 % n == 0;
+    }
+}
+--------------------
+
+//231. Power of Two
+
+//Given an integer, write a function to determine if it is a power of two.
+
+public class Solution {
+    public boolean isPowerOfTwo(int n) {
+        if(n <= 0) return false;
+        while(n > 1){
+            if(n % 2 == 0){
+                n /= 2;
+            }
+            else return false;
+        }
+        return true;
+    }
+}
+--------------------
+public class Solution {
+    public boolean isPowerOfTwo(int n) {
+        if(n <= 0) return false;
+        //power of 2 means only 1 bit is 1, others are all 0
+        if(Integer.bitCount(n) == 1) return true;
+        return false;
+    }
+}
+---------------------
+public class Solution {
+    public boolean isPowerOfTwo(int n) {
+        return n > 0 && Integer.bitCount(n) == 1;
+    }
+}
+---------------------
+
+//83. Remove Duplicates from Sorted List
+
+//Given a sorted linked list, delete all duplicates such that each element appear only once.
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public ListNode deleteDuplicates(ListNode head) {
+        if(head == null) return null;
+        ListNode node = head;
+        while(node.next != null ){
+            if(node.next.val != node.val){
+                node = node.next;
+            }
+            else{
+                node.next = node.next.next;
+            }
+        }
+        return head;
+    }
+}
+-----------------------
+
+//70. Climbing Stairs
+
+//You are climbing a stair case. It takes n steps to reach to the top.
+//Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?
+
+public class Solution {
+    public int climbStairs(int n) {
+        if(n <= 0) return 0;
+        if(n == 1) return 1;
+        if(n == 2) return 2;
+        int x = 1;
+        int y = 2;
+        int z = 0;
+        for(int i = 2; i < n; i++){
+            z = x + y;
+            x = y;
+            y = z;
+        }
+        return z;
+    }
+}
+-------------------------
+
+//35. Search Insert Position
+
+//Given a sorted array and a target value, return the index if the target is found. 
+//If not, return the index where it would be if it were inserted in order.
+//You may assume no duplicates in the array.
+
+public class Solution {
+    public int searchInsert(int[] nums, int target) {
+        if(nums[0] >= target) return 0;
+        if(nums[nums.length-1] < target) return nums.length;
+        for(int i = 0; i < nums.length; i++){
+            if(nums[i] == target) return i;
+            else if(nums[i] < target && nums[i+1] > target) return i+1;
+        }
+        return 0;
+    }
+}
+-------------------
+public class Solution {
+    public int searchInsert(int[] nums, int target) {
+        int low = 0;
+        int high = nums.length-1;
+        int mid = (low+high)/2;
+        while(low <= high){
+            if (nums[mid] == target) return mid;
+            else if(nums[mid] < target){
+                low = mid + 1;
+                mid = (low+high)/2;
+            }
+            else if(nums[mid] > target){
+                high = mid - 1;
+                mid = (low+high)/2;
+            }
+        }
+        return low;
+    }
+}
+----------------------
+
+//107. Binary Tree Level Order Traversal II
+
+//Given a binary tree, return the bottom-up level order traversal of its nodes' values. (ie, from left to right, level by level from leaf to root).
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public List<List<Integer>> levelOrderBottom(TreeNode root) {
+        List<List<Integer>> list = new ArrayList<List<Integer>>();
+        bottomUp(root, list, 0);
+        return list;
+    }
+    
+    private void bottomUp(TreeNode root, List<List<Integer>> list, int level){
+        if(root == null) return;
+        if(list.size() <= level){  //new level, add new list
+            list.add(0, new ArrayList<Integer>());
+        }
+        list.get(list.size()-level-1).add(root.val);
+        bottomUp(root.left, list, level+1);
+        bottomUp(root.right, list, level+1);
+    }
+}
+----------------------
+
+//594. Longest Harmonious Subsequence
+
+//We define a harmonious array is an array where the difference between its maximum value and its minimum value is exactly 1.
+//Now, given an integer array, you need to find the length of its longest harmonious subsequence among all its possible subsequences.
+
+public class Solution {
+    public int findLHS(int[] nums) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for(int i = 0; i < nums.length; i++){
+            map.put(nums[i], map.getOrDefault(nums[i], 0) + 1);
+        }
+        int ret = 0;
+        for(int key : map.keySet()){
+            if(map.keySet().contains(key+1)){
+                ret = Math.max(ret, map.get(key) + map.get(key+1));
+            }
+        }
+        return ret;
+    }
+}
+--------------------
+
+//437. Path Sum III
+
+//You are given a binary tree in which each node contains an integer value.
+//Find the number of paths that sum to a given value.
+//The path does not need to start or end at the root or a leaf, but it must go downwards (traveling only from parent nodes to child nodes).
+//The tree has no more than 1,000 nodes and the values are in the range -1,000,000 to 1,000,000.
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public int pathSum(TreeNode root, int sum) {
+        Map<Integer, Integer> preSum = new HashMap<>();
+        preSum.put(0, 1);
+        return countPath(root, sum, preSum, 0);
+    }
+    
+    private int countPath(TreeNode root, int target, Map<Integer, Integer> preSum, int curSum){
+        if(root == null) return 0;
+        curSum += root.val;
+        int count = preSum.getOrDefault(curSum - target, 0);
+        preSum.put(curSum, preSum.getOrDefault(curSum, 0) + 1);
+        count += countPath(root.left, target, preSum, curSum) + countPath(root.right, target, preSum, curSum);
+        preSum.put(curSum, preSum.get(curSum) - 1);
+        return count;
+    }
+}
+--------------------
+
+//53. Maximum Subarray
+
+//Find the contiguous subarray within an array (containing at least one number) which has the largest sum.
+
+public class Solution {
+    public int maxSubArray(int[] nums) {
+        int[] preSum = new int[nums.length];
+        preSum[0] = nums[0];
+        int ret = nums[0];
+        for(int i = 1; i < nums.length; i++){
+            preSum[i] = preSum[i-1] < 0 ? nums[i] : (preSum[i-1] + nums[i]);
+            ret = Math.max(preSum[i], ret);
+        }
+        return ret;
+    }
+}
+--------------------
+
+//191. Number of 1 Bits
+
+//Write a function that takes an unsigned integer and returns the number of ’1' bits it has (also known as the Hamming weight).
+
+public class Solution {
+    // you need to treat n as an unsigned value
+    public int hammingWeight(int n) {
+        return Integer.bitCount(n);
+    }
+}
+---------------------
+public class Solution {
+    // you need to treat n as an unsigned value
+    public int hammingWeight(int n) {
+        int ones = 0;
+        while(n != 0){
+            ones += n & 1;
+            n = n >>> 1;
+        }
+        return ones;
+    }
+}
+--------------------
+
+//263. Ugly Number
+
+//Write a program to check whether a given number is an ugly number.
+//Ugly numbers are positive numbers whose prime factors only include 2, 3, 5. 
+//For example, 6, 8 are ugly while 14 is not ugly since it includes another prime factor 7.
+//Note that 1 is typically treated as an ugly number.
+
+public class Solution {
+    public boolean isUgly(int num) {
+        if(num <= 0) return false;
+        while(num % 2 == 0){
+            num /= 2;
+        }
+        while(num % 3 == 0){
+            num /= 3;
+        }
+        while(num % 5 == 0){
+            num /= 5;
+        }
+        if(num == 1) return true;
+        return false;
+    }
+}
+-----------------------
+public class Solution {
+    public boolean isUgly(int num) {
+        if(num > 0){
+            for(int i = 2; i < 6; i++){
+                while(num % i == 0){
+                    num /= i;
+                }
+            }
+        }
+        return num == 1;
+    }
+}
+-------------------
+
+//21. Merge Two Sorted Lists
+
+//Merge two sorted linked lists and return it as a new list. 
+//The new list should be made by splicing together the nodes of the first two lists.
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        if(l1 == null && l2 == null) return null;
+        ListNode l3 = new ListNode(0);
+        ListNode head = l3;
+        while(l1 != null || l2 != null){
+            if(l1 == null){
+                l3.next = l2;
+                l2 = l2.next;
+            }
+            else if(l2 == null){
+                l3.next = l1;
+                l1 = l1.next;
+            }
+            else if(l1.val < l2.val){
+                l3.next = l1;
+                l1 = l1.next;
+            }
+            else{
+                l3.next = l2;
+                l2 = l2.next;
+            }
+            l3 = l3.next;
+        }
+        return head.next;
+    }
+}
+--------------------
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        ListNode l3;
+        if(l1 == null) return l2;
+        if(l2 == null) return l1;
+        if(l1.val < l2.val){
+            l3 = l1;
+            l3.next = mergeTwoLists(l1.next, l2);
+        }
+        else{
+            l3 = l2;
+            l3.next = mergeTwoLists(l1, l2.next);
+        }
+        return l3;
+    }
+}
+--------------------
+
+//235. Lowest Common Ancestor of a Binary Search Tree
+
+//Given a binary search tree (BST), find the lowest common ancestor (LCA) of two given nodes in the BST.
+//According to the definition of LCA on Wikipedia: “The lowest common ancestor is defined between two nodes v and w 
+//as the lowest node in T that has both v and w as descendants (where we allow a node to be a descendant of itself).”
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        while(root != null){
+            if(p.val < root.val && q.val < root.val){
+                root = root.left;
+            }
+            else if(p.val > root.val && q.val > root.val){
+                root = root.right;
+            }
+            else return root;
+        }
+        return root;
+    }
+}
+-----------------
+
+//198. House Robber
+
+//You are a professional robber planning to rob houses along a street. 
+//Each house has a certain amount of money stashed, the only constraint stopping you from robbing each of them is that 
+//adjacent houses have security system connected and it will automatically contact the police if two adjacent houses were broken into on the same night.
+//Given a list of non-negative integers representing the amount of money of each house, 
+//determine the maximum amount of money you can rob tonight without alerting the police.
+
+public class Solution {
+    public int rob(int[] nums) {
+        if(nums.length == 0) return 0;
+        int rob = 0;
+        int notrob = 0;
+        for(int i = 0; i < nums.length; i++){
+            int currob = notrob + nums[i];
+            notrob = Math.max(notrob, rob);
+            rob = currob;
+        }
+        return Math.max(rob, notrob);
+    }
+}
+-----------------------
+
+//27. Remove Element
+
+//Given an array and a value, remove all instances of that value in place and return the new length.
+//Do not allocate extra space for another array, you must do this in place with constant memory.
+//The order of elements can be changed. It doesn't matter what you leave beyond the new length.
+
+public class Solution {
+    public int removeElement(int[] nums, int val) {
+        int p = 0;
+        for(int i = 0; i < nums.length; i++){
+            if(nums[i] != val){
+                nums[p] = nums[i];
+                p++;
+            }
+        }
+        return p;
+    }
+}
+----------------------
+
+//459. Repeated Substring Pattern
+
+//Given a non-empty string check if it can be constructed by taking a substring of it and appending multiple copies of the substring together. 
+//You may assume the given string consists of lowercase English letters only and its length will not exceed 10000.
+
+public class Solution {
+    public boolean repeatedSubstringPattern(String s) {
+        int l = s.length();
+        for(int i = l/2; i > 0; i--){
+            if(l % i == 0){
+                int m = l / i;
+                String subStr = s.substring(0, i);
+                StringBuilder newStr = new StringBuilder();
+                for(int j = 0; j < m; j++){
+                    newStr.append(subStr);
+                }
+                if(newStr.toString().equals(s)) return true;
+            }
+        }
+        return false;
+    }
+}
+------------------
+
+//101. Symmetric Tree
+
+//Given a binary tree, check whether it is a mirror of itself (ie, symmetric around its center).
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public boolean isSymmetric(TreeNode root) {
+        if(root == null) return true;
+        return check(root.left, root.right);
+    }
+    
+    private boolean check(TreeNode left, TreeNode right){
+        if(left == null || right == null) return left == right;
+        if(left.val == right.val) return check(left.left, right.right) && check(left.right, right.left);
+        return false;
+    }
+}
+--------------------
+
+//342. Power of Four
+
+//Given an integer (signed 32 bits), write a function to check whether it is a power of 4.
+//Example: Given num = 16, return true. Given num = 5, return false.
+//Follow up: Could you solve it without loops/recursion?
+
+public class Solution {
+    public boolean isPowerOfFour(int num) {
+        return (num > 0) && ((num & (num-1)) == 0) && ((num & 0x55555555) == num);
+    }
+}
+---------------------
+
+//345. Reverse Vowels of a String
+
+//Write a function that takes a string as input and reverse only the vowels of a string.
+//The vowels does not include the letter "y".
+
+public class Solution {
+    public String reverseVowels(String s) {
+        if(s == null || s.length() == 0) return s;
+        String vowels = "aeiouAEIOU";
+        char[] str = s.toCharArray();
+        int i = 0;
+        int j = str.length - 1;
+        while(i < j){
+            while(!vowels.contains(str[i]+"") && i<j){
+                i++;
+            }
+            while(!vowels.contains(str[j]+"") && i<j){
+                j--;
+            }
+            char tmp = str[i];
+            str[i] = str[j];
+            str[j] = tmp;
+            i++;
+            j--;
+        }
+        return String.valueOf(str);
+    }
+}
+------------------
+
+//66. Plus One
+
+//Given a non-negative integer represented as a non-empty array of digits, plus one to the integer.
+//You may assume the integer do not contain any leading zero, except the number 0 itself.
+//The digits are stored such that the most significant digit is at the head of the list.
+
+public class Solution {
+    public int[] plusOne(int[] digits) {
+        for(int i = digits.length-1; i >=0; i--){
+            if(digits[i] != 9){
+                digits[i]++;
+                return digits;
+            }
+            else{
+                digits[i] = 0;
+            }
+        }
+        int[] newDigits = new int[digits.length+1];
+        newDigits[0] = 1;
+        return newDigits;
+    }
+}
+-------------------
+
+//118. Pascal's Triangle
+
+//Given numRows, generate the first numRows of Pascal's triangle.
+
+public class Solution {
+    public List<List<Integer>> generate(int numRows) {
+        List<List<Integer>> allRows = new ArrayList<List<Integer>>();
+        List<Integer> row = new ArrayList<Integer>();
+        for(int i = 0; i < numRows; i++){
+            row.add(0, 1);
+            for(int j = 1; j < row.size()-1; j++){
+                row.set(j, row.get(j) + row.get(j+1));
+            }
+            allRows.add(new ArrayList<Integer>(row));
+        }
+        return allRows;
+    }
+}
+-----------------
+
+//367. Valid Perfect Square
+
+//Given a positive integer num, write a function which returns True if num is a perfect square else False.
+//Note: Do not use any built-in library function such as sqrt.
+
+public class Solution {
+    public boolean isPerfectSquare(int num) {
+        int n = 1;
+        while(num / n > n){
+            n++;
+        }
+        return n * n == num;
+    }
+}
+----------------
+
+//501. Find Mode in Binary Search Tree
+
+//Given a binary search tree (BST) with duplicates, find all the mode(s) (the most frequently occurred element) in the given BST.
+//Assume a BST is defined as follows:
+//The left subtree of a node contains only nodes with keys less than or equal to the node's key.
+//The right subtree of a node contains only nodes with keys greater than or equal to the node's key.
+//Both the left and right subtrees must also be binary search trees.
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public int[] findMode(TreeNode root) {
+        inorder(root);
+        modes = new int[modeCount];
+        curCount = 0;
+        modeCount = 0;
+        inorder(root);
+        return modes;
+    }
+    
+    private void inorder(TreeNode root){
+        if(root == null) return;
+        inorder(root.left);
+        nodeValue(root.val);
+        inorder(root.right);
+    }
+    
+    private int curVal;
+    private int maxCount = 0;
+    private int curCount = 0;
+    private int modeCount = 0;
+    private int[] modes;
+    
+    private void nodeValue(int val){
+        if(val != curVal){
+            curVal = val;
+            curCount = 0;
+        }
+        curCount++;
+        if(curCount > maxCount){
+            maxCount = curCount;
+            modeCount = 1;
+        }
+        else if(curCount == maxCount){
+            if(modes != null){
+                modes[modeCount] = curVal;
+            }
+            modeCount++;
+        }
+    }
+}
+---------------------
+
+//257. Binary Tree Paths
+
+//Given a binary tree, return all root-to-leaf paths.
+//["1->2->5", "1->3"]
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public List<String> binaryTreePaths(TreeNode root) {
+        List<String> ret = new ArrayList<String>();
+        if(root != null) findPath(root, ret, "");
+        return ret;
+    }
+    
+    private void findPath(TreeNode root, List<String> ret, String path){
+        if(root.left == null && root.right == null){
+            ret.add(path + root.val);
+        }
+        if(root.left != null){
+            findPath(root.left, ret, path + root.val + "->");
+        }
+        if(root.right != null){
+            findPath(root.right, ret, path + root.val + "->");
+        }
+    }
+}
+--------------------
+
+//110. Balanced Binary Tree
+
+//Given a binary tree, determine if it is height-balanced.
+//For this problem, a height-balanced binary tree is defined as a binary tree in which 
+//the depth of the two subtrees of every node never differ by more than 1.
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public boolean isBalanced(TreeNode root) {
+        if(root == null) return true;
+        int left = depth(root.left);
+        int right = depth(root.right);
+        return Math.abs(left - right) <= 1 && isBalanced(root.left) && isBalanced(root.right);
+    }
+    
+    private int depth(TreeNode root){
+        if(root == null) return 0;
+        return Math.max(depth(root.left), depth(root.right)) + 1;
+    }
+}
+-------------------
+
+//434. Number of Segments in a String
+
+//Count the number of segments in a string, where a segment is defined to be a contiguous sequence of non-space characters.
+//Please note that the string does not contain any non-printable characters.
+
+public class Solution {
+    public int countSegments(String s) {
+        int count = 0;
+        for(int i = 0; i < s.length(); i++){
+            if(s.charAt(i) != ' ' && (i == 0 || s.charAt(i-1) == ' ')){
+                count++;
+            }
+        }
+        return count;
+    }
+}
+------------------
+
+//119. Pascal's Triangle II
+
+//Given an index k, return the kth row of the Pascal's triangle.
+//For example, given k = 3,
+//Return [1,3,3,1].
+
+public class Solution {
+    public List<Integer> getRow(int rowIndex) {
+        List<Integer> row = new ArrayList<Integer>();
+        if(rowIndex < 0) return row;
+        for(int i = 0; i <= rowIndex; i++){
+            row.add(0, 1);
+            for(int j = 1; j < i; j++){
+                row.set(j, row.get(j) + row.get(j+1));
+            }
+        }
+        return row;
+    }
+}
+------------------
+
+//441. Arranging Coins
+
+//You have a total of n coins that you want to form in a staircase shape, where every k-th row must have exactly k coins.
+//Given n, find the total number of full staircase rows that can be formed.
+//n is a non-negative integer and fits within the range of a 32-bit signed integer.
+
+public class Solution {
+    public int arrangeCoins(int n) {
+        if(n == 0) return 0;
+        int stairs = 1;
+        while(n > 0){
+            if(n - stairs > stairs){
+                n -= stairs;
+                stairs++;
+            }
+            else break;
+        }
+        return stairs;
+    }
+}
+------------------
+
+//232. Implement Queue using Stacks
+
+//Implement the following operations of a queue using stacks.
+//push(x) -- Push element x to the back of queue.
+//pop() -- Removes the element from in front of queue.
+//peek() -- Get the front element.
+//empty() -- Return whether the queue is empty.
+//Notes:
+//You must use only standard operations of a stack -- which means only push to top, peek/pop from top, size, and is empty operations are valid.
+//Depending on your language, stack may not be supported natively. 
+//You may simulate a stack by using a list or deque (double-ended queue), as long as you use only standard operations of a stack.
+//You may assume that all operations are valid (for example, no pop or peek operations will be called on an empty queue).
+
+public class MyQueue {
+
+    /** Initialize your data structure here. */
+    public MyQueue() {
+        
+    }
+    
+    Stack<Integer> input = new Stack();
+    Stack<Integer> output = new Stack();
+    
+    /** Push element x to the back of queue. */
+    public void push(int x) {
+        input.push(x);
+    }
+    
+    /** Removes the element from in front of queue and returns that element. */
+    public int pop() {
+        if(output.empty()){
+            while(!input.empty()){
+                output.push(input.pop());
+            }
+        }
+        return output.pop();
+    }
+    
+    /** Get the front element. */
+    public int peek() {
+        if(output.empty()){
+            while(!input.empty()){
+                output.push(input.pop());
+            }
+        }
+        return output.peek();
+    }
+    
+    /** Returns whether the queue is empty. */
+    public boolean empty() {
+        return input.isEmpty() && output.isEmpty();
+    }
+}
+
+/**
+ * Your MyQueue object will be instantiated and called as such:
+ * MyQueue obj = new MyQueue();
+ * obj.push(x);
+ * int param_2 = obj.pop();
+ * int param_3 = obj.peek();
+ * boolean param_4 = obj.empty();
+ */
+ ----------------------
+ 
+
+
